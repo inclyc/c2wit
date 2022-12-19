@@ -38,8 +38,24 @@ add_compile_options(-Wall -Wextra -pedantic)
 
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${LLVM_CMAKE_DIR}")
-find_package(Clang REQUIRED CONFIG)
+
+find_package(LLVM REQUIRED CONFIG)
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+
+# We incorporate the CMake features provided by LLVM:
+list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
 include(AddLLVM)
+
+find_package(Clang REQUIRED CONFIG)
+
+message("LLVM STATUS:
+  Definitions ${LLVM_DEFINITIONS}
+  Includes    ${LLVM_INCLUDE_DIRS}
+              ${CLANG_INCLUDE_DIRS}
+  Libraries   ${LLVM_LIBRARY_DIRS}"
+)
+
 include_directories(SYSTEM "${LLVM_INCLUDE_DIRS};${CLANG_INCLUDE_DIRS}")
 separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND ${LLVM_DEFINITIONS})
 add_definitions(${LLVM_DEFINITIONS_LIST})
