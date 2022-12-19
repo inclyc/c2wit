@@ -23,31 +23,44 @@ using namespace clang;
 namespace {
 
 class PrintFunctionsConsumer : public ASTConsumer {
-  CompilerInstance &Instance;
+  CompilerInstance &CI;
 
 public:
-  PrintFunctionsConsumer(CompilerInstance &Instance) : Instance(Instance) {}
+  PrintFunctionsConsumer(CompilerInstance &CI) : CI(CI) {}
 
   void HandleTranslationUnit(ASTContext &context) override {
     struct Visitor : public RecursiveASTVisitor<Visitor> {
-      Visitor() {}
+      CompilerInstance &CI;
+      Visitor(CompilerInstance &CI) : CI(CI) {}
 
       bool VisitRecordDecl(RecordDecl *RD) {
         llvm::errs() << RD->getName() << '\n';
         llvm::outs() << "record {" << '\n';
         for (auto i = RD->field_begin(), e = RD->field_end(); i != e; i++) {
           FieldDecl *FD = *i;
-          llvm::errs() << *FD << '\n';
-          llvm::errs() << FD->getType() << '\n';
+          llvm::outs() << FD->getName() << ": ";
+          if (const auto *BT = FD->getType()->getAs<BuiltinType>()) {
+            if (BT->isInteger()) {
+              if (BT->isSignedInteger()) {
+                llvm::outs() << "i";
+              } else {
+                llvm::outs() << "u";
+              }
+              llvm::outs() << CI.getASTContext().getTypeSize(BT) << "\n";
+            } else {
+              // TODO: Other builtin types
+              llvm::outs() << "????" << '\n';
+            }
+          } else {
+            llvm::outs() << "????" << '\n';
+          }
         }
         llvm::outs() << "}" << '\n';
         return true;
       }
 
-      bool VisitTypedefDecl(TypedefDecl *TD) { return true; }
-
       std::set<FunctionDecl *> LateParsedDecls;
-    } v;
+    } v(CI);
     v.TraverseDecl(context.getTranslationUnitDecl());
   }
 };
