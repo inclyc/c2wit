@@ -24,18 +24,13 @@ namespace {
 
 class PrintFunctionsConsumer : public ASTConsumer {
   CompilerInstance &Instance;
-  std::set<std::string> ParsedTemplates;
 
 public:
-  PrintFunctionsConsumer(CompilerInstance &Instance,
-                         std::set<std::string> ParsedTemplates)
-      : Instance(Instance), ParsedTemplates(ParsedTemplates) {}
+  PrintFunctionsConsumer(CompilerInstance &Instance) : Instance(Instance) {}
 
   void HandleTranslationUnit(ASTContext &context) override {
     struct Visitor : public RecursiveASTVisitor<Visitor> {
-      const std::set<std::string> &ParsedTemplates;
-      Visitor(const std::set<std::string> &ParsedTemplates)
-          : ParsedTemplates(ParsedTemplates) {}
+      Visitor() {}
 
       bool VisitRecordDecl(RecordDecl *RD) {
         llvm::errs() << RD->getName() << '\n';
@@ -52,22 +47,21 @@ public:
       bool VisitTypedefDecl(TypedefDecl *TD) { return true; }
 
       std::set<FunctionDecl *> LateParsedDecls;
-    } v(ParsedTemplates);
+    } v;
     v.TraverseDecl(context.getTranslationUnitDecl());
   }
 };
 
 class PrintFunctionNamesAction : public PluginASTAction {
-  std::set<std::string> ParsedTemplates;
 
 protected:
   std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI,
                                                  llvm::StringRef) override {
-    return std::make_unique<PrintFunctionsConsumer>(CI, ParsedTemplates);
+    return std::make_unique<PrintFunctionsConsumer>(CI);
   }
 
   bool ParseArgs(const CompilerInstance &,
-                 const std::vector<std::string> &args) override {
+                 const std::vector<std::string> &) override {
     return true;
   }
 };
