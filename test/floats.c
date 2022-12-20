@@ -1,5 +1,4 @@
-// // RUN: clang -fsyntax-only -fplugin=build/CToWit.so -Xclang -plugin -Xclang \
-// ctowit test/floats.c | FileCheck %s
+// RUN: %{ctowit_clang} %s | FileCheck %s
 
 // CHECK: record {
 struct Floats {
