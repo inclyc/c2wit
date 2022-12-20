@@ -34,9 +34,8 @@ public:
                 llvm::outs() << "u";
               }
               llvm::outs() << CI.getASTContext().getTypeSize(BT) << "\n";
-            } else {
-              // TODO: Other builtin types
-              llvm::outs() << "????" << '\n';
+            } else if (BT->isFloatingType()) {
+              llvm::outs() << "f" << CI.getASTContext().getTypeSize(BT) << "\n";
             }
           } else {
             llvm::outs() << "????" << '\n';

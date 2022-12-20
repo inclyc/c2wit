@@ -37,3 +37,4 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: |
         clang -fsyntax-only -fplugin=build/CToWit.so -Xclang -plugin -Xclang ctowit -fplugin-arg-ctowit-asdasd test/simple_integers.c | FileCheck-14 test/simple_integers.c
+        clang -fsyntax-only -fplugin=build/CToWit.so -Xclang -plugin -Xclang ctowit test/floats.c | FileCheck test/floats.c
