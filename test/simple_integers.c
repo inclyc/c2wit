@@ -1,5 +1,4 @@
-// RUN: clang -fsyntax-only -fplugin=build/CToWit.so -Xclang -plugin -Xclang \
-// ctowit -fplugin-arg-ctowit-asdasd test/simple_integers.c | FileCheck %s
+// RUN: %{ctowit_clang} %s | FileCheck %s
 #include <stdint.h>
 
 // CHECK: record {
