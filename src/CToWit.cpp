@@ -15,7 +15,7 @@ class PrintFunctionsConsumer : public ASTConsumer {
 public:
   PrintFunctionsConsumer(CompilerInstance &CI) : CI(CI) {}
 
-  void HandleTranslationUnit(ASTContext &context) override {
+  void HandleTranslationUnit(ASTContext &ACxt) override {
     struct Visitor : public RecursiveASTVisitor<Visitor> {
       CompilerInstance &CI;
       Visitor(CompilerInstance &CI) : CI(CI) {}
@@ -23,28 +23,27 @@ public:
       bool VisitRecordDecl(RecordDecl *RD) {
         llvm::errs() << RD->getName() << '\n';
         llvm::outs() << "record {" << '\n';
-        for (auto i = RD->field_begin(), e = RD->field_end(); i != e; i++) {
-          FieldDecl *FD = *i;
+        for (auto I = RD->field_begin(), E = RD->field_end(); I != E; I++) {
+          FieldDecl *FD = *I;
           llvm::outs() << FD->getName() << ": ";
           if (const auto *BT = FD->getType()->getAs<BuiltinType>()) {
-            if (BT->isInteger()) {
-              llvm::outs() << (BT->isSignedInteger() ? "i" : "u");
-              llvm::outs() << CI.getASTContext().getTypeSize(BT);
-            } else if (BT->isFloatingType()) {
+            if (BT->isInteger())
+              llvm::outs() << (BT->isSignedInteger() ? "i" : "u")
+                           << CI.getASTContext().getTypeSize(BT);
+            else if (BT->isFloatingType())
               llvm::outs() << "f" << CI.getASTContext().getTypeSize(BT);
-            }
-            llvm::outs() << ",\n";
           } else {
             llvm::outs() << "????";
           }
+          llvm::outs() << ",\n";
         }
         llvm::outs() << "}" << '\n';
         return true;
       }
 
       std::set<FunctionDecl *> LateParsedDecls;
-    } v(CI);
-    v.TraverseDecl(context.getTranslationUnitDecl());
+    } V(CI);
+    V.TraverseDecl(ACxt.getTranslationUnitDecl());
   }
 };
 
