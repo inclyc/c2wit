@@ -9,11 +9,11 @@ using namespace clang;
 
 namespace {
 
-class PrintFunctionsConsumer : public ASTConsumer {
+class CToWitConsumer : public ASTConsumer {
   CompilerInstance &CI;
 
 public:
-  PrintFunctionsConsumer(CompilerInstance &CI) : CI(CI) {}
+  CToWitConsumer(CompilerInstance &CI) : CI(CI) {}
 
   void HandleTranslationUnit(ASTContext &ACxt) override {
     struct Visitor : public RecursiveASTVisitor<Visitor> {
@@ -47,12 +47,12 @@ public:
   }
 };
 
-class PrintFunctionNamesAction : public PluginASTAction {
+class CToWitASTAction : public PluginASTAction {
 
 protected:
   std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI,
                                                  llvm::StringRef) override {
-    return std::make_unique<PrintFunctionsConsumer>(CI);
+    return std::make_unique<CToWitConsumer>(CI);
   }
 
   bool ParseArgs(const CompilerInstance &,
@@ -63,5 +63,5 @@ protected:
 
 } // namespace
 
-static FrontendPluginRegistry::Add<PrintFunctionNamesAction>
+static FrontendPluginRegistry::Add<CToWitASTAction>
     X("ctowit", "Convert C structs to wit");
