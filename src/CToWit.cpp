@@ -28,11 +28,7 @@ public:
           llvm::outs() << FD->getName() << ": ";
           if (const auto *BT = FD->getType()->getAs<BuiltinType>()) {
             if (BT->isInteger()) {
-              if (BT->isSignedInteger()) {
-                llvm::outs() << "i";
-              } else {
-                llvm::outs() << "u";
-              }
+              llvm::outs() << (BT->isSignedInteger() ? "i" : "u");
               llvm::outs() << CI.getASTContext().getTypeSize(BT) << "\n";
             } else if (BT->isFloatingType()) {
               llvm::outs() << "f" << CI.getASTContext().getTypeSize(BT) << "\n";
