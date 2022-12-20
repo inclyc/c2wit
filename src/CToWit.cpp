@@ -29,12 +29,13 @@ public:
           if (const auto *BT = FD->getType()->getAs<BuiltinType>()) {
             if (BT->isInteger()) {
               llvm::outs() << (BT->isSignedInteger() ? "i" : "u");
-              llvm::outs() << CI.getASTContext().getTypeSize(BT) << "\n";
+              llvm::outs() << CI.getASTContext().getTypeSize(BT);
             } else if (BT->isFloatingType()) {
-              llvm::outs() << "f" << CI.getASTContext().getTypeSize(BT) << "\n";
+              llvm::outs() << "f" << CI.getASTContext().getTypeSize(BT);
             }
+            llvm::outs() << ",\n";
           } else {
-            llvm::outs() << "????" << '\n';
+            llvm::outs() << "????";
           }
         }
         llvm::outs() << "}" << '\n';
