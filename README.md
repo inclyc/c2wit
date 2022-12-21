@@ -37,13 +37,13 @@ struct Floats {
 };
 ```
 
-Invoke your system clang and load plugin
+Invoke your system clang and load the plugin
 
 ```
 clang -fsyntax-only -fplugin=build/CToWit.so -Xclang -plugin -Xclang ctowit test.c
 ```
 
-And this plugin convert "Floats" to a .wit record.
+And this plugin converts "Floats" to a .wit record.
 
 ```
 record {
@@ -54,7 +54,7 @@ F64: f64,
 
 ## Testing
 
-This project cherry-picks the LLVM test suite here, requiring FileCheck and lit. FileCheck should be installed via your package manager, for example `llvm-*-tools` on Debian-based systems. Install `lit` via pip.
+This project cherry-picks the LLVM test suite here, requiring `FileCheck` and `lit`. `FileCheck` should be installed via your package manager, for example `llvm-*-tools` on Debian-based systems. Install `lit` via pip.
 
 ```
 pip install lit
