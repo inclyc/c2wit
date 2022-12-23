@@ -1,7 +1,7 @@
 // RUN: %{ctowit_clang} %s | FileCheck %s
 #include <stdint.h>
 
-// CHECK: record {
+// CHECK: record Test {
 struct Test {
   // CHECK: c: i8
   char c;

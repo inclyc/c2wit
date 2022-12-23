@@ -21,8 +21,7 @@ public:
       Visitor(CompilerInstance &CI) : CI(CI) {}
 
       bool VisitRecordDecl(RecordDecl *RD) {
-        llvm::errs() << RD->getName() << '\n';
-        llvm::outs() << "record {" << '\n';
+        llvm::outs() << "record " << RD->getName() << " {\n";
         for (auto I = RD->field_begin(), E = RD->field_end(); I != E; I++) {
           FieldDecl *FD = *I;
           llvm::outs() << FD->getName() << ": ";
