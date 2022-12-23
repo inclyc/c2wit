@@ -46,7 +46,7 @@ clang -fsyntax-only -fplugin=build/CToWit.so -Xclang -plugin -Xclang ctowit test
 And this plugin converts "Floats" to a .wit record.
 
 ```
-record {
+record Floats {
 F32: f32,
 F64: f64,
 }
