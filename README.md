@@ -14,14 +14,14 @@ This is a clang plugin that generate C records to [.wit](https://github.com/byte
 
 ## Installation
 
-Depend on llvm-project >= 14. 
+Depend on llvm-project >= 14. You may need `clang-cpp.so` provided in LLVM libs directory, should be provided by your package manager. 
 
 ```
-cmake -B build
+meson setup build --buildtype=release
 ```
 
 ```
-cmake --build build
+meson compile -C build
 ```
 
 
