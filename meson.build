@@ -15,13 +15,7 @@ add_global_arguments('-Wno-unused-parameter', language: 'cpp')
 
 cpp = meson.get_compiler('cpp')
 
-clang_include = llvm_dep.get_configtool_variable('includedir')
-clang_libdir = llvm_dep.get_configtool_variable('libdir').split(' ')
-
-clang_dep = declare_dependency(
-    dependencies: cpp.find_library('clang-cpp', dirs: clang_libdir),
-    include_directories: include_directories(clang_include),
-)
+clang_dep = cpp.find_library('clang-cpp', has_headers: ['clang/AST/ASTConsumer.h'])
 
 dep_libs = [clang_dep, llvm_dep]
 
