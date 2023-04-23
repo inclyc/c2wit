@@ -5,31 +5,17 @@ on:
 
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
       fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        compiler: [g++, clang++]
 
     if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     steps:
     - uses: actions/checkout@v3
-    - name: Install LLVM (Ubuntu)
-      if: ${{ matrix.os == 'ubuntu-latest' }}
-      run: |
-        sudo apt-get remove llvm-12 clang-12 clang-13 llvm-13 libclang-13-dev
-        sudo apt-get install -y llvm clang libclang-cpp-dev libclang-dev llvm-14-tools llvm-dev
-        sudo ln -s `which FileCheck-14` /usr/bin/FileCheck
-    - name: Setup compiler
-      if: ${{ matrix.compiler != 'g++' }}
-      run: |
-        echo "CXX=${{ matrix.compiler }}" >> $GITHUB_ENV
-    - uses: actions/setup-python@v1
+    - uses: cachix/install-nix-action@v20
       with:
-        python-version: '3.x'
-    - run: pip install meson ninja lit
-    - run: meson setup build/ --buildtype=release
-    - run: meson compile -C build
-    - run: lit -vv test
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
+    - run: nix develop --command meson setup build/ --buildtype=release
+    - run: nix develop --command meson compile -C build
+    - run: nix develop --command lit -vv test
