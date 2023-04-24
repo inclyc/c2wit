@@ -4,7 +4,7 @@ on:
   [push, pull_request]
 
 jobs:
-  build-test:
+  nix-build-develop:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -19,4 +19,16 @@ jobs:
     - run: nix develop --command meson setup build/ --buildtype=release
     - run: nix develop --command meson compile -C build
     - run: nix develop --command lit -vv test
+  nix-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v20
+      with:
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
     - run: nix build .
