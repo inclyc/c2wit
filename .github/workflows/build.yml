@@ -4,7 +4,7 @@ on:
   [push, pull_request]
 
 jobs:
-  ci:
+  build-test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -19,3 +19,4 @@ jobs:
     - run: nix develop --command meson setup build/ --buildtype=release
     - run: nix develop --command meson compile -C build
     - run: nix develop --command lit -vv test
+    - run: nix build .

@@ -19,4 +19,4 @@ clang_dep = dependency('Clang', method : 'cmake', modules: [
   'clangSema', 'clangParse', 'clangEdit', 'clangAnalysis'
 ])
 
-library('CToWit', ['src/CToWit.cpp'], dependencies: [clang_dep, dependency('llvm')])
+library('CToWit', ['src/CToWit.cpp'], dependencies: [clang_dep, dependency('llvm')], install: true)

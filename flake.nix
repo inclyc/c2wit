@@ -7,21 +7,27 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         llvmPackages = pkgs.llvmPackages_15;
+        nativeBuildInputs = with pkgs; [
+          ninja
+          meson
+          lit
+          cmake
+          llvmPackages.clang
+        ];
+        buildInputs = with llvmPackages; [
+          libclang
+          llvm
+        ];
+        selfPackage = pkgs.stdenv.mkDerivation rec {
+          inherit nativeBuildInputs buildInputs;
+          pname = "CToWit";
+          version = "0.0.0";
+          src = ./.;
+        };
       in
       {
-        devShells.default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [
-            ninja
-            meson
-            lit
-            cmake
-            llvmPackages.clang
-          ];
-          buildInputs = with llvmPackages; [
-            libclang
-            llvm
-          ];
-        };
+        devShells.default = pkgs.mkShell { inherit nativeBuildInputs buildInputs; };
+        packages.default = selfPackage;
       }
     );
 }
