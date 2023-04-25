@@ -22,3 +22,6 @@ config.test_exec_root = test_root
 
 config.substitutions.append(
     ('%{c2wit_clang}', f'clang -fsyntax-only -fplugin={workspace_root}/build/libC2WitPlugin.so -Xclang -plugin -Xclang c2wit'))
+
+config.substitutions.append(
+    ('%{c2wit_clang_cc1}', f'clang -cc1 -load {workspace_root}/build/libC2WitPlugin.so -plugin c2wit'))
