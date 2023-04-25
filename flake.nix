@@ -20,7 +20,7 @@
         ];
         selfPackage = pkgs.stdenv.mkDerivation rec {
           inherit nativeBuildInputs buildInputs;
-          pname = "CToWit";
+          pname = "C2Wit";
           version = "0.0.0";
           src = ./.;
         };

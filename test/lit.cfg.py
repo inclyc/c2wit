@@ -1,7 +1,7 @@
 import lit
 import os
 
-config.name = "CToWit"
+config.name = "C2Wit"
 
 config.suffixes = ['.c', '.cpp', '.i', '.cppm', '.m', '.mm', '.cu', '.hip', '.hlsl',
                    '.ll', '.cl', '.clcpp', '.s', '.S', '.modulemap', '.test', '.rs', '.ifs', '.rc']
@@ -21,4 +21,4 @@ config.test_exec_root = workspace_root
 
 
 config.substitutions.append(
-    ('%{ctowit_clang}', f'clang -fsyntax-only -fplugin={workspace_root}/build/libCToWit.so -Xclang -plugin -Xclang ctowit'))
+    ('%{c2wit_clang}', f'clang -fsyntax-only -fplugin={workspace_root}/build/libC2Wit.so -Xclang -plugin -Xclang c2wit'))

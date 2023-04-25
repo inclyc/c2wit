@@ -1,5 +1,5 @@
 project(
-    'CToWit',
+    'C2Wit',
     'cpp', 'c',
     default_options: [
         'warning_level=3',
@@ -19,4 +19,4 @@ clang_dep = dependency('Clang', method : 'cmake', modules: [
   'clangSema', 'clangParse', 'clangEdit', 'clangAnalysis'
 ])
 
-library('CToWit', ['src/CToWit.cpp'], dependencies: [clang_dep, dependency('llvm')], install: true)
+library('C2Wit', ['src/C2Wit.cpp'], dependencies: [clang_dep, dependency('llvm')], install: true)

@@ -1,4 +1,4 @@
-// RUN: %{ctowit_clang} %s | FileCheck %s
+// RUN: %{c2wit_clang} %s | FileCheck %s
 #include <stdint.h>
 
 // CHECK: record Test {
