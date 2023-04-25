@@ -13,6 +13,8 @@ class C2WitConsumer : public ASTConsumer,
                       public RecursiveASTVisitor<C2WitConsumer> {
   CompilerInstance &CI;
 
+  llvm::DenseMap<CanQualType, llvm::StringRef> NamingTable;
+
 public:
   C2WitConsumer(CompilerInstance &CI, std::unique_ptr<raw_ostream> OS)
       : CI(CI), OS(OS ? *OS : llvm::outs()), OwnedOS(std::move(OS)) {}
@@ -24,6 +26,7 @@ public:
   struct WitAnnotation {
     static constexpr llvm::StringRef Export = "wit-export";
     static constexpr llvm::StringRef Name = "wit-name";
+    static constexpr llvm::StringRef Define = "wit-define";
   };
 
 private:

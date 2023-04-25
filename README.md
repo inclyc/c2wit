@@ -53,6 +53,44 @@ F64: f64,
 }
 ```
 
+### Record naming
+
+Mark the record as `__attribute__(("wit-define", <name>))`, gives this record a name, types desugared (i.e. no typedefs, typeofs) are considered the same.
+This is useful to mark a struct a "string", because we do not have native strings in C/C++.
+
+
+```c++
+struct
+__attribute__((annotate("wit-define", "string")))
+foo {
+    int length;
+    char *data;
+};
+
+
+typedef struct foo sugared_foo;
+
+struct bar {
+    int a;
+
+    struct foo b;
+
+    sugared_foo c;
+};
+```
+
+```
+record foo {
+length: i32,
+data: ????,
+}
+record bar {
+a: i32,
+b: string,
+c: string,
+}
+```
+
 ## Testing
 
 This project cherry-picks the LLVM test suite here, requiring `FileCheck` and `lit`. `FileCheck` should be installed via your package manager, for example `llvm-*-tools` on Debian-based systems. Install `lit` via pip.
