@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>CToWit</code></h1>
+  <h1>C2Wit</code></h1>
 
   <p>
     <strong>A language bindings generator for <code>C</code></strong>
@@ -8,13 +8,14 @@
 
 ## About
 
-This is a clang plugin that generate C records to [.wit](https://github.com/bytecodealliance/wit-bindgen). For existing C projects, you can use this project to generate struct declaration to corresponding wit record.
+This is a tool that generate C records to [.wit](https://github.com/bytecodealliance/wit-bindgen).
+For existing C projects, you can use this project to generate struct declaration to corresponding wit record.
 
 
 
 ## Installation
 
-Depend on llvm-project >= 14. You may need `clang-cpp.so` provided in LLVM libs directory, should be provided by your package manager. 
+Depend on llvm-project >= 14. You may need `clang-cpp.so` provided in LLVM libs directory, should be provided by your package manager.
 
 ```
 meson setup build --buildtype=release
@@ -40,7 +41,7 @@ struct Floats {
 Invoke your system clang and load the plugin
 
 ```
-clang -fsyntax-only -fplugin=build/CToWit.so -Xclang -plugin -Xclang ctowit test.c
+clang -fsyntax-only -fplugin=build/C2Wit.so -Xclang -plugin -Xclang c2wit test.c
 ```
 
 And this plugin converts "Floats" to a .wit record.

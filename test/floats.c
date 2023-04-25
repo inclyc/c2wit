@@ -1,4 +1,4 @@
-// RUN: %{ctowit_clang} %s | FileCheck %s
+// RUN: %{c2wit_clang} %s | FileCheck %s
 
 // CHECK: record Floats {
 struct Floats {
