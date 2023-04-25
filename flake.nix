@@ -7,6 +7,9 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         llvmPackages = pkgs.llvmPackages_15;
+        devInputs = with pkgs; [
+          clang-tools
+        ];
         nativeBuildInputs = with pkgs; [
           ninja
           meson
@@ -17,7 +20,9 @@
         buildInputs = with llvmPackages; [
           libclang
           llvm
-        ];
+        ] ++ (with pkgs; [
+          fmt
+        ]);
         selfPackage = pkgs.stdenv.mkDerivation rec {
           inherit nativeBuildInputs buildInputs;
           pname = "C2Wit";
@@ -26,7 +31,10 @@
         };
       in
       {
-        devShells.default = pkgs.mkShell { inherit nativeBuildInputs buildInputs; };
+        devShells.default = pkgs.mkShell {
+          inherit buildInputs;
+          nativeBuildInputs = devInputs ++ nativeBuildInputs;
+        };
         packages.default = selfPackage;
       }
     );
