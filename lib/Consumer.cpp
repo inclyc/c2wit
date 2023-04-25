@@ -20,20 +20,6 @@ void C2WitConsumer::HandleTranslationUnit(clang::ASTContext &ACxt) {
   TraverseDecl(ACxt.getTranslationUnitDecl());
 }
 
-bool C2WitConsumer::VisitRecordDecl(RecordDecl *RD) {
-  OS << "record " << RD->getName() << " {\n";
-  for (auto *FD : RD->fields()) {
-    OS << FD->getName() << ": ";
-    if (const auto *BT = FD->getType()->getAs<BuiltinType>())
-      OS << getWitNameFromBuiltinType(CI.getASTContext(), BT);
-    else
-      OS << "????";
-    OS << ",\n";
-  }
-  OS << "}" << '\n';
-  return true;
-}
-
 static const StringLiteral *maybeConstEvalStringLiteral(ASTContext &Context,
                                                         const Expr *E) {
   Expr::EvalResult Result;
@@ -62,6 +48,48 @@ extractNameAnnotation(const AnnotateAttr *AA, ASTContext &Context, Sema &S) {
       DiagnosticsEngine::Error, "Cannot evaluate naming argument to string");
   S.Diag(AA->getLoc(), ID);
   return std::nullopt;
+}
+
+bool C2WitConsumer::VisitRecordDecl(RecordDecl *RD) {
+  AttrVec Attrs = RD->getAttrs();
+  StringRef DefinedName;
+  auto &Cxt = CI.getASTContext();
+  for (const Attr *Attr : Attrs) {
+    if (const AnnotateAttr *AA = llvm::dyn_cast<AnnotateAttr>(Attr)) {
+      StringRef Annotation = AA->getAnnotation();
+      if (Annotation == WitAnnotation::Define) {
+        if (std::optional<llvm::StringRef> OptName =
+                extractNameAnnotation(AA, CI.getASTContext(), CI.getSema()))
+          DefinedName = *OptName;
+        else
+          return true;
+      }
+    }
+  }
+
+  if (!DefinedName.empty()) {
+    // Assosiate this type a name (put it into our map table)
+    // (potentially) qualified & canonicalized types are considered the same
+    CanQualType Ty = Cxt.getCanonicalType(Cxt.getRecordType(RD));
+    NamingTable.insert({Ty, DefinedName});
+  }
+
+  OS << "record " << RD->getName() << " {\n";
+  for (auto *FD : RD->fields()) {
+    OS << FD->getName() << ": ";
+    QualType FDTy = FD->getType();
+    CanQualType CanoFDTy = Cxt.getCanonicalType(FDTy);
+    if (const auto *BT = FDTy->getAs<BuiltinType>())
+      OS << getWitNameFromBuiltinType(CI.getASTContext(), BT);
+    else if (NamingTable.count(CanoFDTy)) {
+      OS << NamingTable[CanoFDTy];
+    } else {
+      OS << "????";
+    }
+    OS << ",\n";
+  }
+  OS << "}" << '\n';
+  return true;
 }
 
 bool C2WitConsumer::VisitFunctionDecl(FunctionDecl *D) {
