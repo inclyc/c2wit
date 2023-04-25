@@ -54,6 +54,7 @@ bool C2WitConsumer::VisitRecordDecl(RecordDecl *RD) {
   AttrVec Attrs = RD->getAttrs();
   StringRef DefinedName;
   auto &Cxt = CI.getASTContext();
+  bool ShouldExport = false;
   for (const Attr *Attr : Attrs) {
     if (const AnnotateAttr *AA = llvm::dyn_cast<AnnotateAttr>(Attr)) {
       StringRef Annotation = AA->getAnnotation();
@@ -63,7 +64,8 @@ bool C2WitConsumer::VisitRecordDecl(RecordDecl *RD) {
           DefinedName = *OptName;
         else
           return true;
-      }
+      } else if (Annotation == WitAnnotation::Export)
+        ShouldExport = true;
     }
   }
 
@@ -73,6 +75,9 @@ bool C2WitConsumer::VisitRecordDecl(RecordDecl *RD) {
     CanQualType Ty = Cxt.getCanonicalType(Cxt.getRecordType(RD));
     NamingTable.insert({Ty, DefinedName});
   }
+
+  if (!ShouldExport)
+    return true;
 
   OS << "record " << RD->getName() << " {\n";
   for (auto *FD : RD->fields()) {

@@ -5,7 +5,9 @@
 #include <string.h>
 
 // CHECK: record {
-typedef struct {
+typedef struct
+__attribute__((annotate("wit-export")))
+{
 
   // CHECK: ptr: ????
   char *ptr;
@@ -16,7 +18,9 @@ typedef struct {
 // CHECK: }
 
 // CHECK: record {
-typedef struct {
+typedef struct
+__attribute__((annotate("wit-export")))
+{
   // CHECK: name: ????
   demo_string_t name;
 

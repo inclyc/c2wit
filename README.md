@@ -8,8 +8,8 @@
 
 ## About
 
-This is a tool that generate C records to [.wit](https://github.com/bytecodealliance/wit-bindgen).
-For existing C projects, you can use this project to generate struct declaration to corresponding wit record.
+This is a tool that generate C declarations to [.wit](https://github.com/bytecodealliance/wit-bindgen).
+For existing C projects, you can use this project to generate declarations to corresponding wit file.
 
 
 
@@ -28,11 +28,15 @@ meson compile -C build
 
 ## Usage
 
+Declaration having attribute `__attribute__((annotate("wit-export")))` will be exported.
+
 An example translation unit:
 
 ```C
 /* test.c */
-struct Floats {
+struct
+__attribute__((annotate("wit-export")))
+Floats {
     float F32;
     double F64;
 };
@@ -70,7 +74,9 @@ foo {
 
 typedef struct foo sugared_foo;
 
-struct bar {
+struct
+__attribute__((annotate("wit-export")))
+bar {
     int a;
 
     struct foo b;
@@ -80,10 +86,6 @@ struct bar {
 ```
 
 ```
-record foo {
-length: i32,
-data: ????,
-}
 record bar {
 a: i32,
 b: string,

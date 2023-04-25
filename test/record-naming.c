@@ -13,7 +13,9 @@ typedef struct foo sugared_foo;
 
 
 // CHECK: record bar {
-struct bar {
+struct
+__attribute__((annotate("wit-export")))
+bar {
     // CHECK-NEXT: a: i32
     int a;
 

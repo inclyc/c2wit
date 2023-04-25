@@ -2,7 +2,9 @@
 #include <stdint.h>
 
 // CHECK: record Test {
-struct Test {
+struct
+__attribute__((annotate("wit-export")))
+Test {
   // CHECK: c: i8
   char c;
   // CHECK: s: i16
