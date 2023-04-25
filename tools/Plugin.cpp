@@ -1,4 +1,3 @@
-#include "Attr.h"
 #include "Consumer.h"
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <llvm/Support/CommandLine.h>

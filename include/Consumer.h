@@ -5,8 +5,8 @@
 #include <clang/AST/RecursiveASTVisitor.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Sema/Sema.h>
+#include <llvm/ADT/StringRef.h>
 #include <llvm/Support/raw_ostream.h>
-
 namespace clang::c2wit {
 
 class C2WitConsumer : public ASTConsumer,
@@ -19,6 +19,12 @@ public:
 
   void HandleTranslationUnit(ASTContext &ACxt) override;
   bool VisitRecordDecl(RecordDecl *RD);
+  bool VisitFunctionDecl(FunctionDecl *D);
+
+  struct WitAnnotation {
+    static constexpr llvm::StringRef Export = "wit-export";
+    static constexpr llvm::StringRef Name = "wit-name";
+  };
 
 private:
   llvm::raw_ostream &OS;
