@@ -14,7 +14,6 @@
 #include <optional>
 namespace clang::c2wit {
 
-using llvm::Expected;
 using llvm::StringRef;
 
 void C2WitConsumer::HandleTranslationUnit(clang::ASTContext &ACxt) {
