@@ -17,7 +17,7 @@ workspace_root = os.path.join(test_root, "..")
 config.test_source_root = test_root
 
 # test_exec_root: The root path where tests should be run.
-config.test_exec_root = workspace_root
+config.test_exec_root = test_root
 
 
 config.substitutions.append(
