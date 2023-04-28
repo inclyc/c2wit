@@ -22,7 +22,7 @@ protected:
         OutputFilename == "-"
             ? nullptr
             : CI.createOutputFile(OutputFilename, false, true, false);
-    return std::make_unique<C2WitConsumer>(CI, nullptr);
+    return std::make_unique<C2WitConsumer>(CI, std::move(OS));
   }
 
   bool ParseArgs(const CompilerInstance &,
