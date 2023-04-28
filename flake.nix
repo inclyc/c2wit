@@ -36,6 +36,7 @@
         packages.default = selfPackage;
         packages.container = pkgs.dockerTools.buildImage rec {
           name = "c2wit";
+          tag = "latest";
           copyToRoot = pkgs.buildEnv {
             name = "${name}/rootfs";
             paths = [ selfPackage ];
