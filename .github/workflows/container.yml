@@ -2,7 +2,9 @@ name: build container
 
 on:
   push:
+    branches: ["main"]
   pull_request:
+    branches: ["main"]
 
 env:
   IMAGE_NAME: c2wit
@@ -24,6 +26,7 @@ jobs:
     - name: Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
     - name: Push the image
+      if: github.ref == 'refs/heads/main'
       run: |
         IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
         docker load < ./result
