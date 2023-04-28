@@ -20,9 +20,8 @@ clang_dep = dependency('Clang', method : 'cmake', modules: [
 ])
 
 llvm_dep = dependency('llvm')
-fmt_dep = dependency('fmt')
 
-deps = [clang_dep, llvm_dep, fmt_dep]
+deps = [clang_dep, llvm_dep]
 
 incdir = include_directories('include')
 

@@ -20,9 +20,7 @@
         buildInputs = with llvmPackages; [
           libclang
           llvm
-        ] ++ (with pkgs; [
-          fmt
-        ]);
+        ];
         selfPackage = pkgs.stdenv.mkDerivation rec {
           inherit nativeBuildInputs buildInputs;
           pname = "C2Wit";
