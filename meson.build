@@ -28,3 +28,4 @@ incdir = include_directories('include')
 c2wit_lib = library('C2Wit', ['lib/Consumer.cpp', 'lib/Support.cpp'], dependencies: deps, install: true, include_directories : incdir)
 
 library('C2WitPlugin', ['tools/Plugin.cpp'], dependencies: deps, install: true, link_with: c2wit_lib, include_directories : incdir)
+executable('c2wit', ['tools/Tool.cpp'] , dependencies: deps, install: true, link_with: c2wit_lib, include_directories : incdir)

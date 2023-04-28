@@ -11,6 +11,8 @@
 This is a tool that generate C declarations to [.wit](https://github.com/bytecodealliance/wit-bindgen).
 For existing C projects, you can use this project to generate declarations to corresponding wit file.
 
+Note that we provide a standalone clang-tool `c2wit` and a clang plugin `libC2WitPlugin.so`.
+They share the same code about wit-codegen, but expose different user interfaces, for your choice.
 
 
 ## Installation
@@ -42,6 +44,9 @@ Floats {
 };
 ```
 
+<details>
+<summary><b>(a) Use a clang plugin</b></summary>
+
 Invoke your system clang and load the plugin
 
 ```
@@ -56,6 +61,22 @@ F32: f32,
 F64: f64,
 }
 ```
+
+</details>
+<details>
+<summary><b>(b) Use the standalone tool</b></summary>
+
+Here we provide a standalone executable that could be invoked directly.
+
+```
+c2wit test.c
+```
+
+Based on [libTooling](https://clang.llvm.org/docs/LibTooling.html),
+you may specify a compilation database, used to find header files & definitions the translation unit.
+
+</details>
+
 
 ### Record naming
 
