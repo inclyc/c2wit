@@ -20,7 +20,7 @@ They share the same code about wit-codegen, but expose different user interfaces
 OCI-container (namely, docker) images are provided on [github packages](https://github.com/inclyc/C2Wit/pkgs/container/c2wit).
 This is a standalone tool wrapper, you can mount local filesystem into the container and run our tool.
 
-Note: the images is fairly large due to LLVM/Clang dependency (1GB+), if you can not stand this, you can build from source.
+Note: the images is fairly large due to LLVM/Clang dependency (1GB+), if you can not stand this, you can [build from source](https://github.com/inclyc/C2Wit/blob/main/docs/developer-guide.md#build-from-source).
 
 ## Usage
 
