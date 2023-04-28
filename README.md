@@ -107,3 +107,7 @@ b: string,
 c: string,
 }
 ```
+
+## Developer Guide
+
+See [docs/developer-guide](docs/developer-guide.md).
