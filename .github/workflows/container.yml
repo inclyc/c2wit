@@ -1,0 +1,34 @@
+name: build container
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  IMAGE_NAME: c2wit
+
+jobs:
+  nix-container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v20
+      with:
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
+    - run: nix build .#container
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+    - name: Push the image
+      if: github.ref == 'refs/heads/main'
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+        docker load < ./result
+        docker tag $IMAGE_NAME:latest $IMAGE_ID:latest
+        docker push $IMAGE_ID:latest

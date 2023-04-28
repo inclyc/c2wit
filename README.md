@@ -17,16 +17,10 @@ They share the same code about wit-codegen, but expose different user interfaces
 
 ## Installation
 
-Depend on llvm-project >= 14. You may need `clang-cpp.so` provided in LLVM libs directory, should be provided by your package manager.
+OCI-container (namely, docker) images are provided on [github packages](https://github.com/inclyc/C2Wit/pkgs/container/c2wit).
+This is a standalone tool wrapper, you can mount local filesystem into the container and run our tool.
 
-```
-meson setup build --buildtype=release
-```
-
-```
-meson compile -C build
-```
-
+Note: the images is fairly large due to LLVM/Clang dependency (1GB+), if you can not stand this, you can [build from source](https://github.com/inclyc/C2Wit/blob/main/docs/developer-guide.md#build-from-source).
 
 ## Usage
 
@@ -114,12 +108,6 @@ c: string,
 }
 ```
 
-## Testing
+## Developer Guide
 
-This project cherry-picks the LLVM test suite here, requiring `FileCheck` and `lit`. `FileCheck` should be installed via your package manager, for example `llvm-*-tools` on Debian-based systems. Install `lit` via pip.
-
-```
-pip install lit
-```
-
-Our regression tests could be run via `lit test`.
+See [docs/developer-guide](docs/developer-guide.md).
