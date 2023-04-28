@@ -76,7 +76,14 @@ you may specify a compilation database, used to find header files & definitions 
 
 <details>
 <summary><b>Record renaming</b></summary>
-Mark the record as `__attribute__((annotate("wit-define", <name>)))`, gives this record a name, types desugared (i.e. no typedefs, typeofs) are considered the same.
+
+Annotate the record with `wit-define`:
+
+```
+__attribute__((annotate("wit-define", <name>)))
+```
+
+gives this record a name, types desugared (i.e. no typedefs, typeofs) are considered the same.
 This is useful to mark a struct a "string", because we do not have native strings in C/C++.
 
 
